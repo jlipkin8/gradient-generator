@@ -4,31 +4,37 @@ function Gradient() {
   const [colors, setColors] = React.useState(['#FFD500', '#FF0040']);
   const [disableAdd, setDisableAdd] = React.useState(false);
   const [disableRemove, setDisableRemove] = React.useState(false);
+  const [displayCount, setDisplayCount] = React.useState(2);
 
   const colorStops = colors.join(', ');
   const backgroundImage = `linear-gradient(${colorStops})`;
 
   function addColor() {
+    let newColors = [];
     setDisableRemove(false);
-    if (colors.length + 1 > 5) {
+    if (displayCount + 1 > 5) {
       setDisableAdd(true);
       window.alert('There should not be more than 5 colors.');
       return;
     }
-    const newColors = [...colors, '#FF0000'];
-    setColors(newColors);
+    let newDisplayCount = displayCount + 1;
+    setDisplayCount(newDisplayCount);
+    if (colors.length < newDisplayCount) {
+      newColors = [...colors, '#FF0000'];
+      setColors(newColors);
+    }
   }
 
   function removeColor() {
     setDisableAdd(false);
-    if (colors.length - 1 < 2) {
+    if (displayCount - 1 < 2) {
       setDisableRemove(true);
       window.alert('There should be no less than 2 colors.');
       return;
     }
-    const newColors = [...colors];
-    newColors.pop();
-    setColors(newColors);
+    let newDisplayCount = displayCount - 1;
+    console.log({ newDisplayCount });
+    setDisplayCount(newDisplayCount);
   }
 
   function changeColor(event, index) {
@@ -56,7 +62,7 @@ function Gradient() {
       />
 
       <div className="colors">
-        {colors.map((color, index) => {
+        {colors.slice(0, displayCount).map((color, index) => {
           const colorId = `color-${index}`;
           return (
             <div key={colorId} className="color-wrapper">

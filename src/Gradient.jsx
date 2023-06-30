@@ -1,13 +1,17 @@
 import React from 'react';
+import ColorSwatch from './ColorSwatch';
+import DegreeTiltRange from './DegreeTiltRange';
 
 function Gradient() {
   const [colors, setColors] = React.useState(['#FFD500', '#FF0040']);
+  const [degrees, setDegrees] = React.useState(0);
   const [disableAdd, setDisableAdd] = React.useState(false);
   const [disableRemove, setDisableRemove] = React.useState(false);
   const [displayCount, setDisplayCount] = React.useState(2);
 
   const colorStops = colors.join(', ');
-  const backgroundImage = `linear-gradient(${colorStops})`;
+  const degreesTilt = `${degrees}deg`;
+  const backgroundImage = `linear-gradient(${degreesTilt}, ${colorStops})`;
 
   function addColor() {
     let newColors = [];
@@ -65,20 +69,21 @@ function Gradient() {
         {colors.slice(0, displayCount).map((color, index) => {
           const colorId = `color-${index}`;
           return (
-            <div key={colorId} className="color-wrapper">
-              <label htmlFor={colorId}>Color {index + 1}:</label>
-              <div className="input-wrapper">
-                <input
-                  id={colorId}
-                  type="color"
-                  value={color}
-                  onChange={() => changeColor(event, index)}
-                />
-              </div>
-            </div>
+            <ColorSwatch
+              key={colorId}
+              color={color}
+              colorId={colorId}
+              index={index}
+              changeColor={changeColor}
+            ></ColorSwatch>
           );
         })}
       </div>
+
+      <DegreeTiltRange
+        degrees={degrees}
+        setDegrees={setDegrees}
+      ></DegreeTiltRange>
     </div>
   );
 }
